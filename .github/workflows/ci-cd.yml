@@ -182,4 +182,4 @@ jobs:
           git add kubernetes/deployment.yaml
           git commit -m "Update Kubernetes deployment with new image tag: ${{ needs.docker.outputs.image_tag }} [skip ci]" || echo "No changes to commit"
           git puss
-          #1212
+          #121212
