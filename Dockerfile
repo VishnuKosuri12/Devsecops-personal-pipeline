@@ -1,17 +1,28 @@
-# Build stage
+# Base image for building the app
 FROM node:20-alpine AS build
+
 WORKDIR /app
+
+# Install dependencies (cached unless package.json changes)
 COPY package*.json ./
 RUN npm ci
+
+# Bring in the code and run the build
 COPY . .
 RUN npm run build
 
-# Production stage base image pulled from build stage
+# Final image using lightweight Nginx to serve the app
 FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
-# Add nginx configuration if needed
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+WORKDIR /usr/share/nginx/html
+
+# Remove Nginx's default welcome page
+RUN rm -rf ./*
+
+# Copy the compiled output from the build stage
+COPY --from=build /app/dist .
+
 EXPOSE 80
+
+# Run Nginx in the foreground
 CMD ["nginx", "-g", "daemon off;"]
-#learning how to write docker file
-#1212
