@@ -1,17 +1,40 @@
-node_modules
+# Dependency directories
+node_modules/
+
+# Log files
 npm-debug.log
-.git
-.github
-.gitignore
-README.md
-.vscode
-*.md
 *.log
+
+# Environment variables
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
-kubernetes k8s
-#1212
-this is  not there 12
+
+# Build artifacts (common examples, add more if needed)
+build/
+dist/
+out/
+
+# IDE and OS specific files
+.vscode/ # Consider committing if it contains useful workspace settings for team
+.DS_Store # macOS specific
+Thumbs.db # Windows specific
+
+# Important: Only include *.md if you absolutely don't want ANY markdown files committed.
+# This is usually NOT desired as README.md, docs/*.md are important.
+# If you only want to ignore specific temporary .md files, list them explicitly:
+# temp.md
+# scratchpad.md
+# *.md # <-- UNCOMMENT THIS LINE ONLY IF YOU ARE SURE YOU WANT TO IGNORE ALL MARKDOWN
+
+# Kubernetes specific files - only ignore if they contain sensitive, non-committable info
+# Otherwise, Kubernetes config files are typically committed.
+# For example, if you have a secrets file that should not be committed:
+# kubernetes/secrets.yaml
+# k8s/secrets.yaml
+
+# Git related files (implicitly ignored by Git, no need to add here)
+# .git/
+# .gitignore
