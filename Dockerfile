@@ -1,4 +1,6 @@
-# Base image for building the app
+# ────────────────────────────────
+# Build stage: compile the app
+# ────────────────────────────────
 FROM node:20-alpine AS build
 
 WORKDIR /app
@@ -7,22 +9,27 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 
-# Bring in the code and run the build
+# Copy source code and build the app
 COPY . .
 RUN npm run build
 
-# Final image using lightweight Nginx to serve the app
-FROM nginx:alpine
+
+# ────────────────────────────────
+# Production stage: serve with Nginx
+# ────────────────────────────────
+FROM nginx:alpine AS prod
 
 WORKDIR /usr/share/nginx/html
 
-# Remove Nginx's default welcome page
+# Clean default Nginx content
 RUN rm -rf ./*
 
-# Copy the compiled output from the build stage
+# Copy compiled build artifacts from the build stage
 COPY --from=build /app/dist .
 
+# Expose HTTP port
 EXPOSE 80
 
 # Run Nginx in the foreground
 CMD ["nginx", "-g", "daemon off;"]
+
