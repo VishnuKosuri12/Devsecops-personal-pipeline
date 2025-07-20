@@ -1,25 +1,34 @@
 # Logs
-logs
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
-yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Dependency directories
+node_modules/
+# Optional: recursive ignore in monorepos
+# **/node_modules/
+
+# Build output
+dist/
+dist-ssr/
+
+# Local environment files
 *.local
 
-# Editor directories and files
-.vscode/*
+# Editor / IDE configs
+.vscode/
 !.vscode/extensions.json
-.idea
+.idea/
+
+# OS files
 .DS_Store
+
+# Visual Studio & other IDE temp files
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-#ignore12
