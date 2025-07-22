@@ -8,27 +8,37 @@ lerna-debug.log*
 
 # Dependency directories
 node_modules/
-# Optional: recursive ignore in monorepos
-# **/node_modules/
 
-# Build output
+# Build outputs
 dist/
 dist-ssr/
+storybook-static/
 
 # Local environment files
 *.local
+.env.local
+.env.*.local
 
-# Editor / IDE configs
+# Editor and IDE settings
 .vscode/
 !.vscode/extensions.json
 .idea/
 
-# OS files
+# OS-specific files
 .DS_Store
 
-# Visual Studio & other IDE temp files
+# Visual Studio and other IDE temp files
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# Yarn v2 (Berry)
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
