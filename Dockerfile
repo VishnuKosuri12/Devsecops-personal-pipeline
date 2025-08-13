@@ -1,43 +1,46 @@
 # -----------------------------------------------------------------------------------
-# Build Stage: Compile the React/Vue/Angular application
+# Stage 1: Build the Application
 # -----------------------------------------------------------------------------------
-# Use a lean Node.js image for building the application.
-# `node:20-alpine` is a good choice as it's small and contains Node.js and npm.
+# Use a Node.js image with version 20 on a slim Alpine base.
+# Alpine images are very small and efficient.
 FROM node:20-alpine AS build
 
-# Set the working directory inside the container.
+# Set the working directory for the application inside the container.
 WORKDIR /app
 
-# Copy package.json and package-lock.json first to leverage Docker's layer caching.
-# This ensures that `npm ci` only runs if the dependencies have changed.
+# Copy the dependency manifest files first.
+# This allows Docker to cache the 'npm ci' step, speeding up subsequent builds
+# if the dependencies haven't changed.
 COPY package*.json ./
 
-# Install project dependencies. `npm ci` is preferred over `npm install`
-# in CI/CD environments as it uses the lock file and is faster and more reliable.
+# Install project dependencies. 'npm ci' is used for clean, reproducible builds.
 RUN npm ci
 
 # Copy the rest of the application source code.
-# This is a separate step from installing dependencies to further optimize caching.
 COPY . .
 
-# Run the build command as defined in package.json.
-# This command typically compiles the source code into static files.
+# Run the build script defined in package.json.
+# This compiles the application into static files (e.g., HTML, CSS, JS).
 RUN npm run build
 
 
 # -----------------------------------------------------------------------------------
-# Production Stage: Serve the static files with Nginx
+# Stage 2: Serve the Production Files with Nginx
 # -----------------------------------------------------------------------------------
-# Use a very lightweight Nginx image. `nginx:alpine` is ideal for a small final image.
+# Start with a clean, lightweight Nginx image.
 FROM nginx:alpine AS prod
 
-# Set the working directory to Nginx's default web root.
-WORKDIR /usr/share/nginx/html
+# Copy the compiled application files from the 'build' stage.
+# The `--from=build` instruction is the key to multi-stage builds. It tells
+# Docker to copy files from a previously defined stage (named 'build' here).
+# The compiled files are located at `/app/dist` or `/app/build` (depending on the framework).
+COPY --from=build /app/dist /usr/share/nginx/html
 
-# Remove the default Nginx index.html and other files to avoid conflicts.
-# The `rm -rf` command ensures a clean slate before copying the app files.
-RUN rm -rf ./*
+# Optional: Copy a custom Nginx configuration file if needed.
+# COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy the compiled static files from the 'build' stage into the Nginx web root.
-# This is the key to a multi-stage build, keeping the final image small and clean.
-# The `/app
+# Expose port 80 to the host machine.
+EXPOSE 80
+
+# The default command for the nginx:alpine image starts the Nginx server,
+# so no CMD instruction is needed.
