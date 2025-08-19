@@ -1,44 +1,37 @@
-apiVersion: apps/v1               # Use a stable, production-ready API version
+# Use a stable, production-ready API version for this Kubernetes resource.
+apiVersion: apps/v1
+# Defines the type of Kubernetes object; in this case, a Deployment.
 kind: Deployment
+# Metadata for the Deployment, including its name and labels.
 metadata:
+  # The name of the deployment.
   name: tic-tac-toe
+  # Semantic labels to identify the application.
   labels:
-    app: tic-tac-toe             # Semantic label defining the app identity
+    app: tic-tac-toe
+# The specification for the Deployment.
 spec:
-  replicas: 4                    # Defines desired number of replicas
+  # Defines the desired number of replicas (Pods) for the application.
+  replicas: 4
+  # A selector that finds all Pods with the specified labels. This ensures the Deployment manages the correct Pods.
   selector:
     matchLabels:
       app: tic-tac-toe
+  # The Pod template used to create new Pods.
   template:
+    # Metadata for the Pods created from this template.
     metadata:
       labels:
+        # The same labels are used here to ensure the Pods match the Deployment's selector.
         app: tic-tac-toe
+    # The specification for the Pods.
     spec:
+      # A list of containers to run inside the Pod.
       containers:
+        # Defines the single container for the Pod.
         - name: tic-tac-toe
-          image: ghcr.io/vishnukosuri12/devsecops-demo:sha-fb64dc2ac8cd8d79ad4a75c58326596b59eaf402  # Image auto-updated via CI/CD
+          # The container image to use, specified with its full path and SHA-based tag.
+          image: ghcr.io/vishnukosuri12/devsecops-demo:sha-fb64dc2ac8cd8d79ad4a75c58326596b59eaf402
+          # Specifies that the image should always be pulled, ensuring the latest version is used.
           imagePullPolicy: Always
-          ports:
-            - containerPort: 80
-          resources:
-            requests:
-              cpu: "0.2"
-              memory: "256Mi"
-            limits:
-              cpu: "0.5"
-              memory: "512Mi"
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 80
-            initialDelaySeconds: 30
-            periodSeconds: 10
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 80
-            initialDelaySeconds: 5
-            periodSeconds: 5
-      imagePullSecrets:
-        - name: github-container-registry
-# End of Deployment manifest for tic-tac-toe app
+          #
