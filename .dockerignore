@@ -1,40 +1,64 @@
-# Dependency directories
+# ----------------------------------------------------
+# Node.js / JavaScript Dependencies
+# ----------------------------------------------------
 node_modules/
 
-# Log files
-npm-debug.log
+# ----------------------------------------------------
+# Logs
+# ----------------------------------------------------
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 *.log
 
+# ----------------------------------------------------
 # Environment variables
+# ----------------------------------------------------
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
-# Build artifacts (common examples, add more if needed)
+# ----------------------------------------------------
+# Build artifacts
+# ----------------------------------------------------
 build/
 dist/
 out/
 
-# IDE and OS specific files
-.vscode/ # Consider committing if it contains useful workspace settings for team
-.DS_Store # macOS specific
-Thumbs.db # Windows specific
+# ----------------------------------------------------
+# IDE / Editor settings
+# ----------------------------------------------------
+.vscode/         # Ignore unless you want shared workspace settings
+.idea/           # JetBrains IDEs
+*.swp            # Vim swap files
+*.swo
+*.bak
 
-# Important: Only include *.md if you absolutely don't want ANY markdown files committed.
-# This is usually NOT desired as README.md, docs/*.md are important.
-# If you only want to ignore specific temporary .md files, list them explicitly:
+# ----------------------------------------------------
+# OS-specific files
+# ----------------------------------------------------
+.DS_Store        # macOS
+Thumbs.db        # Windows
+
+# ----------------------------------------------------
+# Optional Markdown (careful!)
+# ----------------------------------------------------
+# Only ignore if you don’t want *any* markdown tracked
+# *.md
+# Otherwise, ignore specific temporary scratch docs:
 # temp.md
 # scratchpad.md
-# *.md # <-- UNCOMMENT THIS LINE ONLY IF YOU ARE SURE YOU WANT TO IGNORE ALL MARKDOWN
 
-# Kubernetes specific files - only ignore if they contain sensitive, non-committable info
-# Otherwise, Kubernetes config files are typically committed.
-# For example, if you have a secrets file that should not be committed:
+# ----------------------------------------------------
+# Kubernetes (only ignore sensitive files)
+# ----------------------------------------------------
 # kubernetes/secrets.yaml
 # k8s/secrets.yaml
 
-# Git related files (implicitly ignored by Git, no need to add here)
+# ----------------------------------------------------
+# Git metadata (already ignored by Git, no need)
+# ----------------------------------------------------
 # .git/
-# .gitignore
