@@ -1,46 +1,44 @@
-# -----------------------------------------------------------------------------------
-# Stage 1: Build the Application
-# -----------------------------------------------------------------------------------
-# Use a Node.js image with version 20 on a slim Alpine base.
-# Alpine images are very small and efficient.
+# ---------------------------------
+# Stage 1: Build Environment
+# ---------------------------------
+# Use an official Node.js 20 image on a minimal Alpine Linux base.
+# This stage, aliased as 'build', compiles the application assets.
 FROM node:20-alpine AS build
 
-# Set the working directory for the application inside the container.
+# Set the working directory inside the container.
 WORKDIR /app
 
-# Copy the dependency manifest files first.
-# This allows Docker to cache the 'npm ci' step, speeding up subsequent builds
-# if the dependencies haven't changed.
+# Copy dependency manifests. Separating this from the source code copy
+# leverages Docker's layer caching, speeding up future builds if
+# dependencies haven't changed.
 COPY package*.json ./
 
-# Install project dependencies. 'npm ci' is used for clean, reproducible builds.
+# Install dependencies using 'npm ci' for a fast, reliable, and
+# reproducible build from the lockfile.
 RUN npm ci
 
 # Copy the rest of the application source code.
 COPY . .
 
-# Run the build script defined in package.json.
-# This compiles the application into static files (e.g., HTML, CSS, JS).
+# Execute the build script to compile the application into static files.
 RUN npm run build
 
 
-# -----------------------------------------------------------------------------------
-# Stage 2: Serve the Production Files with Nginx
-# -----------------------------------------------------------------------------------
-# Start with a clean, lightweight Nginx image.
-FROM nginx:alpine AS prod
+# ---------------------------------
+# Stage 2: Production Environment
+# ---------------------------------
+# Use a lightweight Nginx image to serve the static content.
+FROM nginx:alpine
 
-# Copy the compiled application files from the 'build' stage.
-# The `--from=build` instruction is the key to multi-stage builds. It tells
-# Docker to copy files from a previously defined stage (named 'build' here).
-# The compiled files are located at `/app/dist` or `/app/build` (depending on the framework).
+# Copy the compiled static assets from the 'build' stage to the Nginx
+# default public directory. Note: The source directory '/app/dist' may
+# vary depending on your framework (e.g., '/app/build' for Create React App).
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Optional: Copy a custom Nginx configuration file if needed.
+# (Optional) To use a custom Nginx configuration, uncomment the following line.
 # COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 80 to the host machine.
+# Expose port 80 to allow incoming HTTP traffic.
 EXPOSE 80
 
-# The default command for the nginx:alpine image starts the Nginx server,
-# so no CMD instruction is needed.
+# The Nginx base image automatically starts the server, so no explicit CMD is needed.
