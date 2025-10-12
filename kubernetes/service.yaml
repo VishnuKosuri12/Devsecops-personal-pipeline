@@ -1,16 +1,16 @@
-# A simplified and cleaner version of the Service manifest
 apiVersion: v1
 kind: Service
 metadata:
-  name: tic-tac-toe      # The name of this Service object
+  name: tic-tac-toe               # Service name
   labels:
-    app: tic-tac-toe    # A label to help organize and select this Service
+    app: tic-tac-toe              # Label for organization / selection
+
 spec:
-  # 'type: ClusterIP' is default, so it's omitted for brevity.
-  # This Service will only be reachable from within the Kubernetes cluster.
+  # Default type is ClusterIP (internal only), so it’s omitted here.
   ports:
-  - port: 80              # The port the Service will listen on
-    targetPort: 80        # The port on the Pods to forward traffic to
-    # 'protocol: TCP' is the default and can be omitted.
+    - port: 80                    # External port exposed by the Service
+      targetPort: 80              # Port on the Pods the traffic is routed to
+      # protocol: TCP            # TCP is default, so this line is optional
+
   selector:
-    app: tic-tac-toe      # Forwards traffic to any Pod with this exact label
+    app: tic-tac-toe              # Routes traffic to Pods with this label
