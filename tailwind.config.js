@@ -6,4 +6,3 @@ export default {
   },
   plugins: [],
 };
-#1212
