@@ -1,37 +1,33 @@
-# Use a stable, production-ready API version for this Kubernetes resource.
 apiVersion: apps/v1
-# Defines the type of Kubernetes object; in this case, a Deployment.
 kind: Deployment
-# Metadata for the Deployment, including its name and labels.
 metadata:
-  # The name of the deployment.
   name: tic-tac-toe
-  # Semantic labels to identify the application.
   labels:
     app: tic-tac-toe
-# The specification for the Deployment.
 spec:
-  # Defines the desired number of replicas (Pods) for the application.
-  replicas: 4
-  # A selector that finds all Pods with the specified labels. This ensures the Deployment manages the correct Pods.
+  # Maintain 4 running instances of the application
+  replicas: 4 
   selector:
     matchLabels:
       app: tic-tac-toe
-  # The Pod template used to create new Pods.
   template:
-    # Metadata for the Pods created from this template.
     metadata:
       labels:
-        # The same labels are used here to ensure the Pods match the Deployment's selector.
         app: tic-tac-toe
-    # The specification for the Pods.
     spec:
-      # A list of containers to run inside the Pod.
       containers:
-        # Defines the single container for the Pod.
         - name: tic-tac-toe
-          # The container image to use, specified with its full path and SHA-based tag.
           image: ghcr.io/vishnukosuri12/devsecops-demo:sha-fb64dc2ac8cd8d79ad4a75c58326596b59eaf402
-          # Specifies that the image should always be pulled, ensuring the latest version is used.
+          # Ensure the cluster always pulls the specified image (useful for dev/staging, consider IfNotPresent for production)
           imagePullPolicy: Always
-          #
+          # --- The original file was cut off here. Assuming it might have defined ports or resource limits.
+          # Here is an example of what might follow, which you can uncomment or adjust:
+          # ports:
+          #   - containerPort: 8080
+          # resources:
+          #   limits:
+          #     cpu: "500m"
+          #     memory: "512Mi"
+          #   requests:
+          #     cpu: "250m"
+          #     memory: "256Mi"
