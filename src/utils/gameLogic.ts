@@ -1,10 +1,10 @@
 /**
- * Calculate the winner of a tic-tac-toe game
- * @param squares The current state of the board
- * @returns The winner and winning line, or null if no winner
+ * Situation: A tic-tac-toe board is represented as a linear array.
+ * Task: Determine if there is a winner given the current board state.
+ * Action: Scan all possible winning line combinations and check if any line is held by the same player.
+ * Result: Return the winning symbol and line indices if found; otherwise return null.
  */
-export function calculateWinner(squares: Array<string | null>) {
-  // All possible winning lines (rows, columns, diagonals)
+export function calculateWinner(squares: Array<string | null>): { winner: string; line: number[] } | null {
   const lines = [
     [0, 1, 2], // top row
     [3, 4, 5], // middle row
@@ -12,17 +12,14 @@ export function calculateWinner(squares: Array<string | null>) {
     [0, 3, 6], // left column
     [1, 4, 7], // middle column
     [2, 5, 8], // right column
-    [0, 4, 8], // diagonal top-left to bottom-right
-    [2, 4, 6], // diagonal top-right to bottom-left
+    [0, 4, 8], // diagonal top-left → bottom-right
+    [2, 4, 6], // diagonal top-right → bottom-left
   ];
 
-  // Check each winning line
   for (const [a, b, c] of lines) {
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return {
-        winner: squares[a],
-        line: [a, b, c]
-      };
+    const sq = squares[a];
+    if (sq !== null && sq === squares[b] && sq === squares[c]) {
+      return { winner: sq, line: [a, b, c] };
     }
   }
 
@@ -30,16 +27,17 @@ export function calculateWinner(squares: Array<string | null>) {
 }
 
 /**
- * Check if the game is a draw
- * @param squares The current state of the board
- * @returns True if the game is a draw, false otherwise
+ * Situation: After each turn in a tic-tac-toe game, the board may be full.
+ * Task: Check if the game has ended in a draw.
+ * Action: Verify there is no winner, and then check that every square is filled.
+ * Result: Return `true` if the game is a draw; otherwise return `false`.
  */
 export function checkDraw(squares: Array<string | null>): boolean {
-  // If there's a winner, it's not a draw
-  if (calculateWinner(squares)) {
+  // If a winner exists, the game is not a draw
+  if (calculateWinner(squares) !== null) {
     return false;
   }
-  
-  // If all squares are filled, it's a draw
+
+  // The game is a draw only if there are no null squares left
   return squares.every(square => square !== null);
 }
